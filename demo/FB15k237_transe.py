@@ -99,5 +99,5 @@ for epoch in range(10000):
 
                 hits = [10, 3, 1]
                 for hit in hits:
-                    avg_count = np.mean((target_ranks <= hit).float())
+                    avg_count = np.mean((target_ranks <= hit))
                     print("Hits (filtered) @ {}: {:.6f}".format(hit, avg_count))
