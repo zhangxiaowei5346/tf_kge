@@ -70,6 +70,7 @@ for epoch in range(10000):
 
         for target_entity_type in ["head", "tail"]:
             mean_ranks = []
+            mrr = []
             for test_step, (batch_h, batch_r, batch_t) in enumerate(
                     tf.data.Dataset.from_tensor_slices((test_kg.h, test_kg.r, test_kg.t)).batch(test_batch_size)):
 
