@@ -64,7 +64,7 @@ for epoch in range(10000):
         if step % 200 == 0:
             print("epoch = {}\tstep = {}\tloss = {}".format(epoch, step, loss))
 
-    if epoch % 10 == 0:
+    if epoch % 100 == 0:
 
         normed_entity_embeddings = tf.math.l2_normalize(model.entity_embeddings, axis=-1)
 
@@ -90,11 +90,12 @@ for epoch in range(10000):
                 dis = compute_distance(tiled_translated, tiled_entity_embeddings)
 
                 ranks = tf.argsort(tf.argsort(dis, axis=1), axis=1).numpy()
-                print(ranks)
                 target_ranks = ranks[np.arange(len(batch_target)), batch_target.numpy()]
                 print(target_ranks)
                 mrr.extend(1.0 / target_ranks)
+                print(mrr)
                 mean_ranks.extend(target_ranks)
+                print(mean_ranks)
 
                 print("epoch = {}\ttarget_entity_type = {}\tmean_rank = {}\tmrr = {}".format(epoch, target_entity_type,
                                                       np.mean(mean_ranks), np.mean(mrr)))
