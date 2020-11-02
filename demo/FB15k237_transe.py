@@ -90,7 +90,9 @@ for epoch in range(10000):
                 dis = compute_distance(tiled_translated, tiled_entity_embeddings)
 
                 ranks = tf.argsort(tf.argsort(dis, axis=1), axis=1).numpy()
+                print(ranks)
                 target_ranks = ranks[np.arange(len(batch_target)), batch_target.numpy()]
+                print(target_ranks)
                 mrr.extend(1.0 / target_ranks)
                 mean_ranks.extend(target_ranks)
 
