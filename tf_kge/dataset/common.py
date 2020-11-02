@@ -40,7 +40,8 @@ class CommonDataset(DownloadableDataset):
                 line = line.strip()
                 if len(line) == 0:
                     continue
-                head_entity_id, relation_id, tail_entity_id = line.split()
+                #head_entity_id, relation_id, tail_entity_id = line.split()
+                head_entity_id, tail_entity_id, relation_id = line.split()
                 triple = [
                     entity_indexer.id_index_dict[head_entity_id],
                     relation_indexer.id_index_dict[relation_id],
