@@ -91,11 +91,14 @@ for epoch in range(10000):
 
                 ranks = tf.argsort(tf.argsort(dis, axis=1), axis=1).numpy()
                 target_ranks = ranks[np.arange(len(batch_target)), batch_target.numpy()]
-                print(target_ranks)
-                mrr.extend(1.0 / target_ranks)
-                print(mrr)
+                
+                for target_rank in target_ranks:
+                    if target_rank == 0:
+                        mrr.append(0)
+                    else:
+                        mrr.append(1.0 / target_rank)
+                        
                 mean_ranks.extend(target_ranks)
-                print(mean_ranks)
 
                 print("epoch = {}\ttarget_entity_type = {}\tmean_rank = {}\tmrr = {}".format(epoch, target_entity_type,
                                                       np.mean(mean_ranks), np.mean(mrr)))
