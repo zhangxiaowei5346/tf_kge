@@ -45,14 +45,12 @@ for epoch in range(10000):
                 batch_source = batch_t
                 batch_target = batch_h
             
-            print(batch_target)
             
             batch_neg_target = entity_negative_sampling(batch_source, batch_r, kg=train_kg,
                                                         target_entity_type=target_entity_type, filtered=True)
 
             translated = model([batch_source, batch_r], target_entity_type=target_entity_type)
             embedded_target = model.embed_norm_entities(batch_target)
-            print(embedded_target)
             embedded_neg_target = model.embed_norm_entities(batch_neg_target)
 
             pos_dis = compute_distance(translated, embedded_target)
