@@ -70,6 +70,7 @@ for epoch in range(10000):
 
         for target_entity_type in ["head", "tail"]:
             mean_ranks = []
+            mrr = []
             for test_step, (batch_h, batch_r, batch_t) in enumerate(
                     tf.data.Dataset.from_tensor_slices((test_kg.h, test_kg.r, test_kg.t)).batch(test_batch_size)):
 
@@ -90,7 +91,16 @@ for epoch in range(10000):
 
                 ranks = tf.argsort(tf.argsort(dis, axis=1), axis=1).numpy()
                 target_ranks = ranks[np.arange(len(batch_target)), batch_target.numpy()]
+                print(target_ranks)
+                mrr.extend(1.0 / target_ranks)
+                print(mrr)
                 mean_ranks.extend(target_ranks)
+                print(mean_ranks)
 
-            print("epoch = {}\ttarget_entity_type = {}\tmean_rank = {}".format(epoch, target_entity_type,
-                                                                               np.mean(mean_ranks)))
+                print("epoch = {}\ttarget_entity_type = {}\tmean_rank = {}\tmrr = {}".format(epoch, target_entity_type,
+                                                      np.mean(mean_ranks), np.mean(mrr)))
+
+                hits = [10, 3, 1]
+                for hit in hits:
+                    avg_count = np.mean((target_ranks <= hit))
+                    print("Hits (filtered) @ {}: {:.6f}".format(hit, avg_count))
