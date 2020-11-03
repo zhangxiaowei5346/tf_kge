@@ -92,21 +92,27 @@ for epoch in range(10000):
 
                 ranks = tf.argsort(tf.argsort(dis, axis=1), axis=1).numpy()
                 target_ranks = ranks[np.arange(len(batch_target)), batch_target.numpy()]
-                mrr.extend(1.0 / target_ranks.float())
+                
+                for target_rank in target_ranks:
+                    if target_rank == 0:
+                        mrr.append(0)
+                    else:
+                        mrr.append(1.0 / target_rank)
+                        
                 mean_ranks.extend(target_ranks)
-		
+                
                 if np.mean(mean_ranks) <= best_mr_module:
                     file_1 = open('entity2vec.txt', 'w')
                     file_1.writelines(model.embed_norm_entities(entity_indexer))
-                    file_1.close()
+                    file_1.close
                     file_2 = open('relation2vec.txt', 'w')
                     file_2.writelines(model.embed_norm_entities(relation_indexer))
-                    file_2.close()
-		
+                    file_2.close
+
                 print("epoch = {}\ttarget_entity_type = {}\tmean_rank = {}\tmrr = {}".format(epoch, target_entity_type,
                                                       np.mean(mean_ranks), np.mean(mrr)))
 
                 hits = [10, 3, 1]
                 for hit in hits:
-                    avg_count = np.mean((target_ranks <= hit).float())
-                    print("Hits @ {}: {:.6f}".format(hit, avg_count))
+                    avg_count = np.mean((target_ranks <= hit))
+                    print("Hits (filtered) @ {}: {:.6f}".format(hit, avg_count))
