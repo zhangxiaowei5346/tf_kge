@@ -95,13 +95,13 @@ for epoch in range(10000):
                 mrr.extend(1.0 / target_ranks.float())
                 mean_ranks.extend(target_ranks)
 		
-		if np.mean(mean_ranks) <= best_mr_module:
+                if np.mean(mean_ranks) <= best_mr_module:
                     file_1 = open('entity2vec.txt', 'w')
                     file_1.writelines(model.embed_norm_entities(entity_indexer))
-                    file_1.close
+                    file_1.close()
                     file_2 = open('relation2vec.txt', 'w')
                     file_2.writelines(model.embed_norm_entities(relation_indexer))
-                    file_2.close
+                    file_2.close()
 		
                 print("epoch = {}\ttarget_entity_type = {}\tmean_rank = {}\tmrr = {}".format(epoch, target_entity_type,
                                                       np.mean(mean_ranks), np.mean(mrr)))
