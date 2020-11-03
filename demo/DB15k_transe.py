@@ -44,7 +44,9 @@ for epoch in range(10000):
             else:
                 batch_source = batch_t
                 batch_target = batch_h
-
+            
+            print(batch_target)
+            
             batch_neg_target = entity_negative_sampling(batch_source, batch_r, kg=train_kg,
                                                         target_entity_type=target_entity_type, filtered=True)
 
