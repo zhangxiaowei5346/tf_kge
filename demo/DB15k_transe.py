@@ -50,6 +50,7 @@ for epoch in range(10000):
 
             translated = model([batch_source, batch_r], target_entity_type=target_entity_type)
             embedded_target = model.embed_norm_entities(batch_target)
+            print(embedded_target)
             embedded_neg_target = model.embed_norm_entities(batch_neg_target)
 
             pos_dis = compute_distance(translated, embedded_target)
@@ -101,8 +102,8 @@ for epoch in range(10000):
                         
                 mean_ranks.extend(target_ranks)
                 
-                if np.mean(mean_ranks) <= best_mr_module:
-                    print(model.embed_norm_entities(entity_indexer))
+                #if np.mean(mean_ranks) <= best_mr_module:
+                    #print(model.embed_norm_entities(entity_indexer))
                     #file_1 = open('entity2vec.txt', 'w')
                     #file_1.writelines(model.embed_norm_entities(entity_indexer))
                     #file_1.close()
