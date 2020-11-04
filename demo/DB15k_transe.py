@@ -29,6 +29,8 @@ def compute_distance(a, b):
 
 
 model = TransE(train_kg.num_entities, train_kg.num_relations, embedding_size)
+print(model.entity_embeddings)
+print(model.relation_embeddings)
 
 for epoch in range(10000):
 
@@ -73,6 +75,14 @@ for epoch in range(10000):
         for target_entity_type in ["head", "tail"]:
             mean_ranks = []
             mrr = []
+            
+            hits_at_ten_head, hits_at_ten_head = [], []
+            hits_at_ten_tail, hits_at_ten_tail = [], []
+            hits_at_three_head, hits_at_three_head = [], []
+            hits_at_three_tail, hits_at_three_tail = [], []
+            hits_at_one_head, hits_at_one_head = [], []
+            hits_at_one_tail, hits_at_one_tail = [], []
+            
             for test_step, (batch_h, batch_r, batch_t) in enumerate(
                     tf.data.Dataset.from_tensor_slices((test_kg.h, test_kg.r, test_kg.t)).batch(test_batch_size)):
 
@@ -117,4 +127,6 @@ for epoch in range(10000):
                 hits = [10, 3, 1]
                 for hit in hits:
                     avg_count = np.mean((target_ranks <= hit))
-                    print("Hits (filtered) @ {}: {:.6f}".format(hit, avg_count))
+                    print("Hits @ {}: {:.6f}".format(hit, avg_count))
+        print(model.entity_embeddings)
+        print(model.relation_embeddings)
