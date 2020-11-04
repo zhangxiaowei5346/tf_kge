@@ -121,12 +121,12 @@ for epoch in range(10000):
                     #file_2.writelines(model.embed_norm_entities(relation_indexer))
                     #file_2.close()
 
-                print("epoch = {}\ttarget_entity_type = {}\tmean_rank = {}\tmrr = {}".format(epoch, target_entity_type,
-                                                      np.mean(mean_ranks), np.mean(mrr)))
+                #print("epoch = {}\ttarget_entity_type = {}\tmean_rank = {}\tmrr = {}".format(epoch, target_entity_type,
+                #                                      np.mean(mean_ranks), np.mean(mrr)))
 
                 hits = [10, 3, 1]
-                for hit in hits:
-                    avg_count = np.mean((target_ranks <= hit))
-                    print("Hits @ {}: {:.6f}".format(hit, avg_count))
+                #for hit in hits:
+                #    avg_count = np.mean((target_ranks <= hit))
+                #    print("Hits @ {}: {:.6f}".format(hit, avg_count))
         print(model.entity_embeddings)
         print(model.relation_embeddings)
