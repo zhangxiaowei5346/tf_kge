@@ -29,14 +29,15 @@ def compute_distance(a, b):
 
 
 model = TransE(train_kg.num_entities, train_kg.num_relations, embedding_size)
-print(model.entity_embeddings)
-print(model.relation_embeddings)
 
 for epoch in range(10000):
 
     for step, (batch_h, batch_r, batch_t) in enumerate(
             tf.data.Dataset.from_tensor_slices((train_kg.h, train_kg.r, train_kg.t)).shuffle(10000).batch(
                     train_batch_size)):
+        print(batch_h)
+        print(batch_r)
+        print(batch_t)
         target_entity_type = "head" if np.random.randint(0, 2) == 0 else "tail"
         # for target_entity_type in ["head", "tail"]:
         with tf.GradientTape() as tape:
