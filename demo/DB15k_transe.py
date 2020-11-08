@@ -13,6 +13,7 @@ from tf_kge.utils.sampling_utils import entity_negative_sampling
 import numpy as np
 
 train_kg, test_kg, valid_kg, entity_indexer, relation_indexer = DB15kDataset().load_data()
+print(train_kg.h)
 
 embedding_size = 50
 margin = 1.0
