@@ -9,10 +9,12 @@ class TransE(tf.keras.Model):
         super().__init__(*args, **kwargs)
 
         self.entity_embeddings = tf.Variable(
-            tf.random.truncated_normal([num_entities, embedding_size], stddev=np.sqrt(1 / embedding_size))
+            #tf.random.truncated_normal([num_entities, embedding_size], stddev=np.sqrt(1 / embedding_size))
+             tf.random.truncated_normal([num_entities, embedding_size], stddev=3 * np.sqrt(1 / embedding_size))
         )
         self.relation_embeddings = tf.Variable(
-            tf.random.truncated_normal([num_relations, embedding_size], stddev=np.sqrt(1 / embedding_size))
+            #tf.random.truncated_normal([num_relations, embedding_size], stddev=np.sqrt(1 / embedding_size))
+             tf.random.truncated_normal([num_relations, embedding_size], stddev=3 * np.sqrt(1 / embedding_size))
         )
 
     def embed_norm(self, embeddings, indices):
