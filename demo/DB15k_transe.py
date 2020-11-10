@@ -13,7 +13,6 @@ from tf_kge.utils.sampling_utils import entity_negative_sampling
 import numpy as np
 
 train_kg, test_kg, valid_kg, entity_indexer, relation_indexer = DB15kDataset().load_data()
-print(train_kg.h)
 
 embedding_size = 50
 margin = 1.0
@@ -52,6 +51,7 @@ for epoch in range(10000):
 
             translated = model([batch_source, batch_r], target_entity_type=target_entity_type)
             embedded_target = model.embed_norm_entities(batch_target)
+            print(embedded_target)
             embedded_neg_target = model.embed_norm_entities(batch_neg_target)
 
             pos_dis = compute_distance(translated, embedded_target)
