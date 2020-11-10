@@ -18,10 +18,10 @@ embedding_size = 50
 margin = 1.0
 train_batch_size = 8000
 test_batch_size = 100
-best_mrr_module = 10000
-best_mr_module = 10000
+best_mrr_module = 0
+best_mr_module = 0
 best_module_hits = []
-best_module_epoch = []
+best_module_epoch = 0
 
 optimizer = tf.keras.optimizers.Adam(learning_rate=1e-2)
 
@@ -127,13 +127,13 @@ for epoch in range(10000):
 
         print("epoch = {}\tmean_rank = {}\tmrr = {}".format(epoch, np.mean(mean_ranks), np.mean(mrr)))
         print("Hits @ 10: {:.6f}, Hits @ 3: {:.6f}, Hits @ 1: {:.6f}".format(np.mean(hits_at_ten), np.mean(hits_at_three), np.mean(hits_at_one)))
-        if(np.mean(mrr) < best_mrr_module):
+        if(np.mean(mrr) > best_mrr_module):
             best_mrr_module = np.mean(mrr)
             best_mr_module = np.mean(mean_ranks)
-            best_module_hits.append(np.mean(hits_at_ten))
-            best_module_hits.append(np.mean(hits_at_three))
-            best_module_hits.append(np.mean(hits_at_one))
-            best_module_epoch.append(epoch)
+            best_module_hits[0] = np.mean(hits_at_ten)
+            best_module_hits[1] = np.mean(hits_at_three)
+            best_module_hits[2] = np.mean(hits_at_one)
+            best_module_epoch = epoch
         print("best_epoch = {}\tbest_mean_rank = {}\tbest_mrr = {}".format(best_module_epoch, best_mr_module, best_mrr_module))
         print("best_Hits @ 10: {:.6f}, best_Hits @ 3: {:.6f}, best_Hits @ 1: {:.6f}".format(best_module_hits[0], best_module_hits[1], best_module_hits[2]))
             
