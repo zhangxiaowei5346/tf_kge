@@ -95,11 +95,13 @@ for epoch in range(10000):
                 ranks = tf.argsort(tf.argsort(dis, axis=1), axis=1).numpy()
                 target_ranks = ranks[np.arange(len(batch_target)), batch_target.numpy()]
                 
+                print(targer_ranks)
+                
                 for target_rank in target_ranks:
                     if target_rank == 0:
-                        mrr.extend(0)
+                        mrr.append(0)
                     else:
-                        mrr.extend(1.0 / target_rank)
+                        mrr.append(1.0 / target_rank)
                         
                 mean_ranks.extend(target_ranks)
                 
@@ -115,11 +117,11 @@ for epoch in range(10000):
                 #print("epoch = {}\ttarget_entity_type = {}\tmean_rank = {}\tmrr = {}".format(epoch, target_entity_type,
                 #                                      np.mean(mean_ranks), np.mean(mrr)))
                 avg_count = np.mean((target_ranks <= 10))
-                hits_at_ten.extend(avg_count)
+                hits_at_ten.append(avg_count)
                 avg_count = np.mean((target_ranks <= 3))
-                hits_at_three.extend(avg_count)
+                hits_at_three.append(avg_count)
                 avg_count = np.mean((target_ranks <= 1))
-                hits_at_one.extend(avg_count)
+                hits_at_one.append(avg_count)
 
         print("epoch = {}\tmean_rank = {}\tmrr = {}".format(epoch, np.mean(mean_ranks), np.mean(mrr)))
         print("Hits @ 10: {:.6f}, Hits @ 3: {:.6f}, Hits @ 1: {:.6f}".format(np.mean(hits_at_ten), np.mean(hits_at_three), np.mean(hits_at_one)))
