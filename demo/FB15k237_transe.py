@@ -126,9 +126,9 @@ for epoch in range(10000):
             best_module_hits_one = np.mean(hits_at_one)
             best_module_epoch = epoch
             with open('entity_vec_FB15k_237.txt', 'w') as f:
-                f.write(module.entity_embeddings)
+                f.write(model.entity_embeddings)
             with open('relation_vec_FB15k_237.txt', 'w') as f:
-                f.write(module.relation_embeddings)   
+                f.write(model.relation_embeddings)   
         print("best_epoch = {}\tbest_mean_rank = {}\tbest_mrr = {}".format(best_module_epoch, best_mr_module, best_mrr_module))
         print("best_Hits @ 10: {:.6f}, best_Hits @ 3: {:.6f}, best_Hits @ 1: {:.6f}".format(best_module_hits_ten, best_module_hits_three, best_module_hits_one))
 
