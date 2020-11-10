@@ -130,7 +130,9 @@ for epoch in range(10000):
         if(np.mean(mrr) < best_mrr_module):
             best_mrr_module = np.mean(mrr)
             best_mr_module = np.mean(mean_ranks)
-            best_module_hits.append(np.mean(hits_at_ten), np.mean(hits_at_three), np.mean(hits_at_one))
+            best_module_hits.append(np.mean(hits_at_ten))
+            best_module_hits.append(np.mean(hits_at_three))
+            best_module_hits.append(np.mean(hits_at_one))
             best_module_epoch.append(epoch)
         print("best_epoch = {}\tbest_mean_rank = {}\tbest_mrr = {}".format(best_module_epoch, best_mr_module, best_mrr_module))
         print("best_Hits @ 10: {:.6f}, best_Hits @ 3: {:.6f}, best_Hits @ 1: {:.6f}".format(best_module_hits[0], best_module_hits[1], best_module_hits[2]))
