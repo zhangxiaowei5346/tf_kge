@@ -2,7 +2,7 @@
 import os
 
 from tf_kge.model.transe import TransE
-
+from google.colab import files
 # os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 import tf_kge
 
@@ -18,7 +18,12 @@ embedding_size = 50
 margin = 1.0
 train_batch_size = 8000
 test_batch_size = 100
-best_mr_module = 10000
+best_mrr_module = 0
+best_mr_module = 0
+best_module_hits_ten = 0
+best_module_hits_three = 0
+best_module_hits_one = 0
+best_module_epoch = 0
 
 optimizer = tf.keras.optimizers.Adam(learning_rate=1e-2)
 
@@ -44,7 +49,8 @@ for epoch in range(10000):
             else:
                 batch_source = batch_t
                 batch_target = batch_h
-
+            
+            
             batch_neg_target = entity_negative_sampling(batch_source, batch_r, kg=train_kg,
                                                         target_entity_type=target_entity_type, filtered=True)
 
@@ -65,13 +71,14 @@ for epoch in range(10000):
         if step % 200 == 0:
             print("epoch = {}\tstep = {}\tloss = {}".format(epoch, step, loss))
 
-    if epoch % 100 == 0:
-
+    if epoch % 200 == 0:
+        
+        hits_at_ten, hits_at_three, hits_at_one = [], [], []
+        mean_ranks = []
+        mrr = []
         normed_entity_embeddings = tf.math.l2_normalize(model.entity_embeddings, axis=-1)
 
         for target_entity_type in ["head", "tail"]:
-            mean_ranks = []
-            mrr = []
             for test_step, (batch_h, batch_r, batch_t) in enumerate(
                     tf.data.Dataset.from_tensor_slices((test_kg.h, test_kg.r, test_kg.t)).batch(test_batch_size)):
 
@@ -93,6 +100,7 @@ for epoch in range(10000):
                 ranks = tf.argsort(tf.argsort(dis, axis=1), axis=1).numpy()
                 target_ranks = ranks[np.arange(len(batch_target)), batch_target.numpy()]
                 
+                
                 for target_rank in target_ranks:
                     if target_rank == 0:
                         mrr.append(0)
@@ -101,18 +109,28 @@ for epoch in range(10000):
                         
                 mean_ranks.extend(target_ranks)
                 
-                if np.mean(mean_ranks) <= best_mr_module:
-                    file_1 = open('entity2vec.txt', 'w')
-                    file_1.writelines(model.embed_norm_entities(entity_indexer))
-                    file_1.close
-                    file_2 = open('relation2vec.txt', 'w')
-                    file_2.writelines(model.embed_norm_entities(relation_indexer))
-                    file_2.close
+                avg_count = np.mean((target_ranks <= 10))
+                hits_at_ten.append(avg_count)
+                avg_count = np.mean((target_ranks <= 3))
+                hits_at_three.append(avg_count)
+                avg_count = np.mean((target_ranks <= 1))
+                hits_at_one.append(avg_count)
 
-                print("epoch = {}\ttarget_entity_type = {}\tmean_rank = {}\tmrr = {}".format(epoch, target_entity_type,
-                                                      np.mean(mean_ranks), np.mean(mrr)))
+        print("epoch = {}\tmean_rank = {}\tmrr = {}".format(epoch, np.mean(mean_ranks), np.mean(mrr)))
+        print("Hits @ 10: {:.6f}, Hits @ 3: {:.6f}, Hits @ 1: {:.6f}".format(np.mean(hits_at_ten), np.mean(hits_at_three), np.mean(hits_at_one)))
+        if(np.mean(mrr) > best_mrr_module):
+            best_mrr_module = np.mean(mrr)
+            best_mr_module = np.mean(mean_ranks)
+            best_module_hits_ten = np.mean(hits_at_ten)
+            best_module_hits_three = np.mean(hits_at_three)
+            best_module_hits_one = np.mean(hits_at_one)
+            best_module_epoch = epoch
+            with open('entity_vec_FB15k_237.txt', 'w') as f:
+                f.write(module.entity_embeddings)
+            with open('relation_vec_FB15k_237.txt', 'w') as f:
+                f.write(module.relation_embeddings)   
+        print("best_epoch = {}\tbest_mean_rank = {}\tbest_mrr = {}".format(best_module_epoch, best_mr_module, best_mrr_module))
+        print("best_Hits @ 10: {:.6f}, best_Hits @ 3: {:.6f}, best_Hits @ 1: {:.6f}".format(best_module_hits_ten, best_module_hits_three, best_module_hits_one))
 
-                hits = [10, 3, 1]
-                for hit in hits:
-                    avg_count = np.mean((target_ranks <= hit))
-                    print("Hits (filtered) @ {}: {:.6f}".format(hit, avg_count))
+files.download('entity_vec_FB15k_237.txt')
+files.download('relation_vec_FB15k_237.txt')
