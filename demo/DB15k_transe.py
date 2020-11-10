@@ -51,7 +51,6 @@ for epoch in range(10000):
 
             translated = model([batch_source, batch_r], target_entity_type=target_entity_type)
             embedded_target = model.embed_norm_entities(batch_target)
-            print(embedded_target)
             embedded_neg_target = model.embed_norm_entities(batch_neg_target)
 
             pos_dis = compute_distance(translated, embedded_target)
@@ -96,12 +95,14 @@ for epoch in range(10000):
 
                 tiled_entity_embeddings = tf.tile(tf.expand_dims(normed_entity_embeddings, axis=0),
                                                   [batch_h.shape[0], 1, 1])
+                print(tiled_entity_embeddings)
                 tiled_translated = tf.tile(tf.expand_dims(translated, axis=1),
                                            [1, normed_entity_embeddings.shape[0], 1])
                 dis = compute_distance(tiled_translated, tiled_entity_embeddings)
 
                 ranks = tf.argsort(tf.argsort(dis, axis=1), axis=1).numpy()
                 target_ranks = ranks[np.arange(len(batch_target)), batch_target.numpy()]
+                print(target_ranks)
                 
                 for target_rank in target_ranks:
                     if target_rank == 0:
