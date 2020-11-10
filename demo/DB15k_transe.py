@@ -130,5 +130,3 @@ for epoch in range(10000):
                 #for hit in hits:
                 #    avg_count = np.mean((target_ranks <= hit))
                 #    print("Hits @ {}: {:.6f}".format(hit, avg_count))
-        print(model.entity_embeddings)
-        print(model.relation_embeddings)
