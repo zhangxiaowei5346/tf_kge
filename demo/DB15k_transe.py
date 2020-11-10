@@ -95,7 +95,7 @@ for epoch in range(10000):
                 ranks = tf.argsort(tf.argsort(dis, axis=1), axis=1).numpy()
                 target_ranks = ranks[np.arange(len(batch_target)), batch_target.numpy()]
                 
-                print(targer_ranks)
+                print(target_ranks)
                 
                 for target_rank in target_ranks:
                     if target_rank == 0:
