@@ -126,11 +126,12 @@ for epoch in range(10000):
             best_module_hits_one = np.mean(hits_at_one)
             best_module_epoch = epoch
             print(model.relation_embeddings.numpy())
-            with open('entity_vec_FB15k_237.txt', 'w') as f:
-                for num in np.nditer(model.relation_embeddings.numpy()):
-                    print(num)
-                    f.write(num + '\t')
-            f.close()
+            np.savetxt('entity_vec_FB15k_237.txt', )
+#             with open('entity_vec_FB15k_237.txt', 'w') as f:
+#                 for num in np.nditer(model.relation_embeddings.numpy()):
+#                     print(num)
+#                     f.write(num + '\t')
+#             f.close()
 #             with open('relation_vec_FB15k_237.txt', 'w') as f:
 #                 for line in model.relation_embeddings.numpy():
 #                     f.write(line + '\n')
@@ -139,4 +140,4 @@ for epoch in range(10000):
         print("best_Hits @ 10: {:.6f}, best_Hits @ 3: {:.6f}, best_Hits @ 1: {:.6f}".format(best_module_hits_ten, best_module_hits_three, best_module_hits_one))
 
 files.download('entity_vec_FB15k_237.txt')
-files.download('relation_vec_FB15k_237.txt')
+# files.download('relation_vec_FB15k_237.txt')
