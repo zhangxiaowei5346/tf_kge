@@ -126,7 +126,7 @@ for epoch in range(10000):
             best_module_hits_one = np.mean(hits_at_one)
             best_module_epoch = epoch
             print(model.relation_embeddings.numpy())
-            np.savetxt('entity_vec_FB15k_237.txt', )
+            np.savetxt('entity_vec_FB15k_237.txt', model.relation_embeddings.numpy())
 #             with open('entity_vec_FB15k_237.txt', 'w') as f:
 #                 for num in np.nditer(model.relation_embeddings.numpy()):
 #                     print(num)
