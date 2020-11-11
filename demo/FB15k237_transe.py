@@ -19,7 +19,7 @@ margin = 1.0
 train_batch_size = 8000
 test_batch_size = 100
 best_mrr_module = 0
-best_mr_module = 0
+best_mr_module = 100000
 best_module_hits_ten = 0
 best_module_hits_three = 0
 best_module_hits_one = 0
@@ -118,7 +118,7 @@ for epoch in range(10000):
 
         print("epoch = {}\tmean_rank = {}\tmrr = {}".format(epoch, np.mean(mean_ranks), np.mean(mrr)))
         print("Hits @ 10: {:.6f}, Hits @ 3: {:.6f}, Hits @ 1: {:.6f}".format(np.mean(hits_at_ten), np.mean(hits_at_three), np.mean(hits_at_one)))
-        if(np.mean(mrr) > best_mrr_module):
+        if(np.mean(mean_ranks) < best_mr_module):
             best_mrr_module = np.mean(mrr)
             best_mr_module = np.mean(mean_ranks)
             best_module_hits_ten = np.mean(hits_at_ten)
